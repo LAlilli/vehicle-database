@@ -1,1 +1,121 @@
 #sub-class for trucks only
+
+public class Truck extends RoadVehicle
+{
+	Truck ()
+	{
+		super();
+	}
+	
+	Truck(String make, int year, String color, int milesPerGallon,
+            int price, int cylinder, String drive)
+	{
+		super();
+		super.setAll(make, year, color, milesPerGallon, price) ;
+		this.setCylinder(cylinder);
+		this.setWheelDrive(drive);
+	}
+	
+	Truck(boolean setToRandom)
+	{
+		super();
+		if(setToRandom)
+		{
+			//System.out.println("Truck truck setRandom.");
+			setRandom();
+		}
+		else
+		{
+			//System.out.println("Truck truck input.");
+			input();
+		}
+	}
+	
+	int cylinder; //4, 6, 8
+	private String[] wheelDrive = {"AWD", "4WD", "2WD"};
+    private String drive;
+	
+    String getWheelDrive()
+    {
+        return drive ;
+    }
+
+    void setWheelDrive (String drive)
+    {
+        this.drive = drive ;
+    }
+    
+    int getCylinder()
+    {
+        return cylinder ;
+    }
+
+    void setCylinder (int cylinder)
+    {
+        this.cylinder = cylinder ;
+    }
+    
+	void setAll (String make, int year, String color, int milesPerGallon,
+            int price, int cylinder, String drive)
+	{
+		super.setAll(make, year, color, milesPerGallon, price) ;
+		this.setCylinder(cylinder);
+		this.setWheelDrive(drive);
+	}
+	
+	public void input()
+    {
+        super.input() ;
+        super.setType (ListingType.TRUCK) ;
+        setCylinder ( ListingUtil.queryInt("Enter Cylinder Engine:  ") ) ;
+        setWheelDrive(ListingUtil.queryString("Enter Wheel Drive: "));
+    }
+	
+	public void setRandom ()
+    {
+		int cylinder;
+		int select;
+		int length;
+		String drive;
+        super.setRandom() ;
+        
+        length = wheelDrive.length ;
+        select = (int)Math.floor(Math.random()*length) ;
+        setWheelDrive(wheelDrive[select]) ;
+    }
+	
+	public void print()
+    {
+        System.out.format ( "%-10s %-8s %4d %7d mpg %4d cyl  %4s  $%6d \n",
+                            getMake(), getColor(), getYear(), getMilesPerGallon(), getCylinder(), getWheelDrive(),
+                            getPrice()) ;
+    }
+	
+	public boolean matchCriteria (SearchCriteria criteria)
+    {
+        boolean match ;
+        match = super.matchCriteria(criteria) ;
+        if (match==false) return false ;
+
+        if (criteria.getType()!=ListingType.TRUCK)
+        {
+            return false ;
+        }
+
+        // Truck matches
+        if ( (criteria.getCylinderMin()!=0) && (cylinder<criteria.getCylinderMin()) )
+        {
+            return false ;
+        }
+
+        if ( (criteria.getDrive()!=null) && (!drive.equalsIgnoreCase(criteria.getDrive()) ) )  //need to add to search criteria file
+        {
+            // wheel drive is not a match
+            return false ;
+        }
+        // Met criteria for all field specified
+        return true ;
+    }
+}//car class end
+
+
