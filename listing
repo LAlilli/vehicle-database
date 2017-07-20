@@ -1,1 +1,16 @@
 #interface for road vehicle listings
+
+public interface Listing {
+
+    public abstract ListingType getType() ;
+
+    public abstract void setType (ListingType type) ;
+    
+    public void setRandom() ;
+    
+    public abstract boolean matchCriteria (SearchCriteria criteria) ;
+    
+    public abstract void input() ;
+    
+    public abstract void print() ;
+}
