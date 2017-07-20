@@ -1,1 +1,100 @@
 #functions for user responses when searching for listings
+
+import java.util.* ;
+
+//Utility methods and type for the Listing and Search project
+public class ListingUtil
+{
+
+	//default constructor
+	ListingUtil ()
+	{
+		
+	}
+	
+	//constructor with user entry
+	ListingUtil (String prompt)
+	{
+		String userEntry = prompt;
+	}
+	
+ public enum ListingType {CAR, SPORTSCAR, TRUCK, MOTORCYCLE, BOAT, JETSKI} ;
+ static Scanner scanIn = new Scanner(System.in) ;
+
+ static String queryString (String prompt)
+ {
+     // Returns null for no response
+     String entry ;
+     System.out.print (prompt) ;
+     entry = scanIn.nextLine() ;
+     entry = entry.toLowerCase().trim();
+     if (entry.length()==0) entry = null ;
+     return entry ;
+ }
+ 
+ static int queryInt (String prompt)
+ {
+     // Return 0 (zero) for no response
+     String entry ;
+     int entryInt ;
+     
+     //LAB 9A - TEST FOR VALID ENTRY LOOP
+     while (true)
+     {
+    	 System.out.print (prompt) ;
+    	 entry = scanIn.nextLine() ;
+    	 //LAB 9B - TRY/CATCH BLOCK
+    	//want 0 or pos #, no neg #'s
+    	 if (entry.length() == 0) 
+    	 {
+    		 entryInt = 0;
+    		 break;
+    	 }
+    	 else
+    	 {
+    		 try
+    		 {
+    			 entryInt = Integer.parseInt (entry) ; 
+    			 break;
+    		 }
+    	 
+    		 catch (NumberFormatException except)
+    		 {
+    			 System.out.println("Invalid entry, try again. ");
+    		 }
+    	 }
+     }
+     return entryInt ;
+ }
+ 
+ static float queryFloat (String prompt)
+ {
+     // Returns 0f for no response
+     String entry ;
+     float entryFloat ;
+     
+     while (true)
+     {
+    	 System.out.print (prompt) ;
+    	 entry = scanIn.nextLine() ;
+    	 if (entry.length()==0)
+    	 {
+    		 entryFloat = 0f ;
+    		 break;
+    	 }
+    	 else
+    	 {
+    		 try
+    		 {
+    			 entryFloat = Float.parseFloat (entry) ; 
+    		 }
+    		 
+    		 catch(NumberFormatException except)
+    		 {
+    			 System.out.println("Invalid entry, try again. ");
+    		 } 
+    	 }
+     }
+     return entryFloat ;
+ }
+}
