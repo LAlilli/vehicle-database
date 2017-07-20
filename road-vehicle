@@ -1,1 +1,174 @@
 #super class for all vehicles
+
+public abstract class RoadVehicle implements Listing
+{
+	RoadVehicle ()
+	{
+		//default
+	}
+	
+	RoadVehicle(String make, int year, String color, int milesPerGallon, int price)
+	{
+		setAll(make, year, color, milesPerGallon, price);
+	}
+	
+	private ListingType type ;
+	private static String[] makeList = {"ford", "chevy", "dodge", "honda", "hyundai"};
+    private String make;
+    private static String[] colorList = {"grey", "silver", "white", "black", "blue", "green"};
+    private String color;
+    private int year;
+    private int price;
+    private int milesPerGallon;
+	
+    public ListingType getType()
+    {
+        return type ;
+    }
+    
+    public void setType (ListingType type)
+    {
+        this.type = type ;
+    }
+    
+    void setMilesPerGallon (int milesPerGallon)
+    {
+    	this.milesPerGallon = milesPerGallon;
+    }
+    
+    int getMilesPerGallon ()
+    {
+    	return this.milesPerGallon;
+    }
+    
+    void setPrice (int price)
+    {
+    	this.price = price;
+    }
+    
+    int getPrice ()
+    {
+    	return this.price;
+    }
+    
+	void setYear (int year)
+	{
+		this.year = year;
+	}
+	
+	int getYear ()
+	{
+		return this.year;
+	}
+	
+	void setMake (String make)
+	{
+		this.make = make;
+	}
+	
+	String getMake ()
+	{
+		return this.make;
+	}
+	
+	void setColor (String color)
+	{
+		this.color = color;
+	}
+	
+	String getColor ()
+	{
+		return this.color;
+	}
+	
+    void setAll (String make, int year, String color, int milesPerGallon, int price)
+    {
+        this.setMake    (make) ;
+        this.setYear    (year) ;
+        this.setColor   (color) ;
+        this.setMilesPerGallon (milesPerGallon) ;
+        this.setPrice   (price) ;
+    }
+    
+    public void setRandom ()
+    {
+        int length ;
+        int select ;
+        int year ;
+        int milesPerGallon ;
+        int price ;
+        length = makeList.length ;
+        select = (int)Math.floor(Math.random()*length) ;
+        setMake(makeList[select]) ;
+        // Random color
+        length = colorList.length ;
+        select = (int)Math.floor(Math.random()*length) ;
+        setColor(colorList[select]) ;
+        // Random year
+        year = (int)(Math.random() * (2017 - 1990) + 1990); 
+        setYear(year) ;
+        // Random mpg
+        milesPerGallon = (int)(Math.random() * (35 - 15) + 15) ;
+        setMilesPerGallon(milesPerGallon) ;
+        // Random price
+        price = (int)(Math.random() * (40000 - 10000) + 10000) ;
+        setPrice(price) ;
+    }
+    
+    public void input()
+    {
+        setMake    ( ListingUtil.queryString ("Enter Make:    ") ) ;
+        setYear    ( ListingUtil.queryInt    ("Enter Year:    ") ) ;
+        setColor   ( ListingUtil.queryString ("Enter Color:   ") ) ;
+        setMilesPerGallon ( ListingUtil.queryInt    ("Enter MPG: ") ) ;
+        setPrice   ( ListingUtil.queryInt    ("Enter Price:   ") ) ;
+    }
+    
+    public boolean matchCriteria (SearchCriteria criteria)
+    {
+        // Check if object is in the range of min to max
+        // For String variables, min=="" ignore field, max=="" ignore max
+        //   if both min!="" and max!="", match either field
+        // For numberic variables, max==0 ignore field
+
+        if ( (criteria.getMake()!=null) && (!make.equalsIgnoreCase(criteria.getMake()) ) )
+        {
+            // Make is not a match
+            return false ;
+        }
+        
+        if ( (criteria.getColor()!=null) && (!color.equalsIgnoreCase(criteria.getColor()) ) )
+        {
+            // Color is not a match
+            return false ;
+        }
+        
+        if ( (price<criteria.getMinPrice()) || ((criteria.getMaxPrice()!=0) && (price>criteria.getMaxPrice())) )
+        {
+            // Price is not a match
+            return false ;
+        }
+        
+        if ( (year<criteria.getMinYear()) || ((criteria.getMaxYear()!=0) && (year>criteria.getMaxYear())) )
+        {
+            // Year is not a match
+            return false ;
+        }
+
+        if ( (milesPerGallon<criteria.getMinMilesPerGallon()) || ((criteria.getMaxMilesPerGallon()!=0) && (milesPerGallon>criteria.getMaxMilesPerGallon())) )
+        {
+            // Mileage is not a match
+            return false ;
+        }
+
+        // Met criteria for all field specified
+        return true ;
+    }
+
+    public void print()
+    {
+        System.out.format ( "%-10s %-10s %-8s %4d %7d miles  $%7d\n",
+                            getMake(),getColor(),
+                            getYear(),getMilesPerGallon(),getPrice() ) ;
+    }
+}
