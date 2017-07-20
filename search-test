@@ -1,1 +1,199 @@
 #run/test class
+
+import java.util.ArrayList ;
+
+public class SearchTest
+{
+    static ArrayList<Listing> list = new ArrayList<Listing>() ;
+    static SearchCriteria criteria = new SearchCriteria() ;
+        
+    public static void main (String[] args)
+    {
+        // local variables
+        String action ;
+        // Main loop
+        do
+        {
+            action = actionQuery() ;
+            switch (action)
+            {
+                case "add":
+                    add() ;
+                    break ;
+                case "random":
+                    random() ;
+                    break ;
+                case "remove":
+                    remove() ;
+                    break ;
+                case "list":
+                    list() ;
+                    break ;
+                case "search":
+                    search() ;
+                    break ;
+                case "exit":
+                    // done, exit
+                    break ;
+                default:
+                    // No action, done, exiting
+                    System.out.println ("Invalid option, try again") ;
+                    break ;
+            }  // switch (action)
+        }
+        while ( !action.equals("exit") ) ;
+    }
+
+    private static String actionQuery ()
+    {
+        // Input next user action
+        String response ;
+        System.out.println ("What would you like to do next?") ;
+        response = ListingUtil.queryString("  Enter add, remove, search, random, list or exit:  ") ;
+        response = response.toLowerCase() ;
+        response = response.trim() ;
+        return response ;
+    }
+    
+    private static void add ()
+    {
+        // Input listing type
+        Listing item = null ;
+        String selType ;
+        System.out.println ("What type of listing?") ;
+        selType = ListingUtil.queryString("  Enter car, sports car or truck:  ") ;
+        selType = selType.toLowerCase().trim() ;
+        switch (selType)
+        {
+            case "car" :
+                item = new Car(false) ;
+                item.setType (ListingType.CAR) ;
+                break ;
+            case "sports car" :
+                item = new SportsCar(false) ;
+                item.setType (ListingType.SPORTSCAR) ;
+                break ;
+            case "truck" :
+                item = new Truck(false) ;
+                item.setType (ListingType.TRUCK) ;
+                break ;
+            default :
+                System.out.println ("Not a valid type.") ;
+                return ;
+        }
+        //item.input() ;
+        list.add(item) ;
+    }
+
+    private static void random() 
+    {
+        Listing item = null ;
+        int quantity ;
+        int count ;
+        String selType ;
+        quantity = ListingUtil.queryInt ("How many random vehicles? ") ;
+        System.out.println ("What type of listing?") ;
+        selType = ListingUtil.queryString ("  Enter car, sports car or truck: ") ;
+        selType = selType.toLowerCase().trim() ;
+        for (count=0; count<quantity; count++)
+        {
+            switch (selType)
+            {
+                case "car" :
+                    item = new Car(true) ;
+                    item.setType (ListingType.CAR) ;
+                    break ;
+                case "sports car" :
+                    item = new SportsCar(true) ;
+                    item.setType (ListingType.SPORTSCAR) ;
+                    break ;
+                case "truck" :
+                    item = new Truck(true) ;
+                    item.setType (ListingType.TRUCK) ;
+                    break ;
+                default :
+                    System.out.println ("Not a valid type.") ;
+                    return ;
+            }
+            //item.setRandom() ;
+            list.add(item) ;
+        }
+        System.out.println (quantity + " added") ;
+    }
+
+    private static void remove() 
+    {
+        int    index ;
+        String response ;
+        index = ListingUtil.queryInt("Enter index of vehicle to remove: ") ;
+        if ( (index>=0) && (index<list.size()) )
+        {
+            System.out.println ("Would you like to remove this vehicle?") ;
+            list.get(index).print() ;
+            response = ListingUtil.queryString ("Enter Yes to delete: ") ;
+            if ( (response==null) || (!response.equals("Yes")) )
+            {
+                System.out.println ("Not removed") ;
+            }
+            else
+            {
+                list.remove(index) ;
+                System.out.println ("Removed") ;
+            }
+        }
+        else
+        {
+            System.out.println ("Not a valid selection") ;
+        }
+    }
+    
+    private static void list()
+    {
+        for (Listing current : list)
+        {
+            System.out.format ("[%3d] ",list.indexOf(current)) ;
+            current.print() ;
+        }
+
+    }
+
+    private static void search()
+    {
+        boolean status = false;
+        
+        while (true)
+        {
+        	try
+        	{
+        		criteria.input();
+        		if (status)
+                {
+                    for (Listing current : list)
+                    {
+                    	status = current.matchCriteria(criteria) ;
+                    		if (status)
+                            {
+                                System.out.format ("[%3d] ",list.indexOf(current)) ;
+                                current.print() ;
+                            }
+                    }
+                }
+        		criteria.print() ;
+        		break;
+        	}
+        	//NEW LAB 9E - add diagnostics here
+        	catch (InputException ex)
+        	{
+        		System.out.println(ex.getMessage());
+        		if (ex.valuesSet == true)
+        		{
+        			System.out.format("	%.1f  %.1f  %n", ex.value1, ex.value2);
+        		}
+        	}
+        }
+        //OLD status = criteria.input() ;
+        //OLD criteria.print() ;
+    }
+    
+}
+
