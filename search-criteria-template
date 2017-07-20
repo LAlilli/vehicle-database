@@ -1,0 +1,10 @@
+
+public interface SearchCriteriaTemplate {
+    // method input sets all the SearchCriteria 
+    //   instance variables using user queries
+    public abstract boolean input() throws InputException ;
+    
+    // method print displays all SearchCrieria
+    //   instance variables
+    public abstract void print() ;
+}
