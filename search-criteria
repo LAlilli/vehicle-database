@@ -1,1 +1,189 @@
 #search criteria class
+
+import java.util.ArrayList;
+
+public class SearchCriteria implements SearchCriteriaTemplate 
+{	
+	private ListingType type ;
+	private String make;
+    private String color;
+    private int maxYear;
+    private int minYear;
+    private int maxPrice;
+    private int minPrice;
+    private int maxMilesPerGallon;
+    private int minMilesPerGallon;
+    private int topSpeedMin ;
+    private int horsePowerMin;
+    private int curbWeightMin;
+    private int cylinderMin;
+    private String drive;
+    
+    public boolean input() throws InputException //must have this statement if throwing exception, need try statement for user
+    {
+        String selType ;
+        System.out.println ("Which search criteria set?") ;
+        selType = ListingUtil.queryString("  Enter car, sports car or truck:  ") ;
+        selType = selType.toLowerCase().trim() ;
+        switch (selType)
+        {
+            case "car" :
+                type = ListingType.CAR ;
+                break ;
+            case "sports car" :
+                type = ListingType.SPORTSCAR ;
+                break ;
+            case "truck" :
+                type = ListingType.TRUCK ;
+                break ;
+            default :
+                throw new InputException("Not a valid type. ");
+            	//OLD System.out.println ("Not a valid type.") ;
+                //OLD return false ;
+        }
+        make       = ListingUtil.queryString ("Enter Make:            ") ;
+        color      = ListingUtil.queryString ("Enter Color:           ") ;
+        minPrice   = ListingUtil.queryInt    ("Enter Minimum Price:   ") ;
+        maxPrice   = ListingUtil.queryInt    ("Enter Maximum Price:   ") ;
+      //LAB 9D - throw exception for user error
+        if (minPrice > maxPrice) throw new InputException("Max must be greater than or equal to min. ", minPrice, maxPrice);
+        minYear    = ListingUtil.queryInt    ("Enter Minimum Year:    ") ;
+        maxYear    = ListingUtil.queryInt    ("Enter Maximum Year:    ") ;
+        if (minYear > maxYear) throw new InputException ("Max must be greater than or equal to min. ", minYear, maxYear);
+        minMilesPerGallon = ListingUtil.queryInt    ("Enter Minimum MPG: ") ;
+        maxMilesPerGallon = ListingUtil.queryInt    ("Enter Maximum MPG: ") ;
+        if (minMilesPerGallon > maxMilesPerGallon) throw new InputException ("Max must be greater than or equal to min. ", minMilesPerGallon, maxMilesPerGallon);
+        if (type==ListingType.SPORTSCAR)
+        {
+            topSpeedMin    = ListingUtil.queryInt   ("Enter Minimum Top Speed:    ") ;
+            horsePowerMin    = ListingUtil.queryInt   ("Enter Minimum Horsepower:    ") ;
+            curbWeightMin = ListingUtil.queryInt("Enter Minimum Curb Weight:    ");
+        }
+        else
+        {
+            topSpeedMin    = 0 ;
+            horsePowerMin = 0;
+            curbWeightMin = 0;
+        }
+        if (type==ListingType.TRUCK)
+        {
+            cylinderMin    = ListingUtil.queryInt   ("Enter Minimum Cylinder:    ") ;
+            drive    = ListingUtil.queryString   ("Enter Wheel Drive:    ") ;
+        }
+        else
+        {
+            cylinderMin    = 0 ;
+            drive = "null";
+        }
+        return true ;
+    }
+    
+    public void print()
+    {
+        System.out.format ("make           %s\n", make) ;        
+        System.out.format ("color          %s\n", color) ;
+        System.out.format ("minPrice       %d\n", minPrice) ;
+        System.out.format ("maxPrice       %d\n", maxPrice) ;        
+        System.out.format ("minYear        %d\n", minYear) ;
+        System.out.format ("maxYear        %d\n", maxYear) ;
+        System.out.format ("minMilesPerGallon     %d\n", minMilesPerGallon) ;
+        System.out.format ("maxMilesPerGallon     %d\n", maxMilesPerGallon) ;
+        System.out.format ("topSpeedMin    %d\n", topSpeedMin) ;
+        System.out.format ("horsePowerMin    %d\n", horsePowerMin) ;
+        System.out.format ("curbWeightMin    %d\n", curbWeightMin) ;
+        System.out.format ("cylinderMin    %d\n", cylinderMin) ;
+        System.out.format ("drive    %s\n", drive) ;
+    }
+    
+    public void set ( ListingType type, String make, String color, 
+            int minPrice, int maxPrice, int minYear, int maxYear, 
+            int minMilesPerGallon, int maxMilesPerGallon, int topSpeedMin, int horsePowerMin, int curbWeightMin, int cylinderMin, String drive )
+ {
+     this.type           = type ;
+     this.make           = make ;
+     this.color          = color ;
+     this.minPrice       = minPrice ;
+     this.maxPrice       = maxPrice ;
+     this.minYear        = minYear ;
+     this.maxYear        = maxYear ;
+     this.minMilesPerGallon     = minMilesPerGallon ;
+     this.maxMilesPerGallon     = maxMilesPerGallon ;
+     this.topSpeedMin    = topSpeedMin ;
+     this.horsePowerMin    = horsePowerMin ;
+     this.curbWeightMin    = curbWeightMin ;
+     this.cylinderMin    = cylinderMin ;
+     this.drive    = drive ;
+ }
+
+    //getter methods
+    ListingType getType()
+    {
+        return type ;
+    }
+    
+    int getCylinderMin()
+    {
+    	return cylinderMin;
+    }
+    
+    int getCurbWeightMin()
+    {
+        return curbWeightMin ;
+    }
+    
+    int getHorsePowerMin()
+    {
+        return horsePowerMin ;
+    }
+    
+    int getTopSpeedMin()
+    {
+        return topSpeedMin ;
+    }
+    
+    int getMaxMilesPerGallon ()
+    {
+    	return this.maxMilesPerGallon;
+    }
+    
+    int getMinMilesPerGallon ()
+    {
+    	return this.minMilesPerGallon;
+    }
+ 
+    int getMaxPrice ()
+    {
+    	return this.maxPrice;
+    }
+    
+    int getMinPrice ()
+    {
+    	return this.minPrice;
+    }
+	
+	int getMaxYear ()
+	{
+		return this.maxYear;
+	}
+	
+	int getMinYear ()
+	{
+		return this.minYear;
+	}
+	
+	String getMake ()
+	{
+		return this.make;
+	}
+	
+	String getColor ()
+	{
+		return this.color;
+	}
+	
+	String getDrive()
+	{
+		return this.drive;
+	}
+
+}
