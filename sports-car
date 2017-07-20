@@ -1,0 +1,148 @@
+
+	public class SportsCar extends Car
+	{
+
+		SportsCar () 
+		{
+			super ();
+		}
+		
+		SportsCar(String make, int year, String color, int milesPerGallon,
+                int price, int topSpeed, int horsePower, int curbWeight)
+		{
+			super();
+			super.setAll(make, year, color, milesPerGallon, price) ;
+	        this.setTopSpeed    (topSpeed) ;
+	        this.setHorsePower (horsePower);
+	        this.setCurbWeight (curbWeight);
+		}
+		
+		SportsCar(boolean setToRandom)
+		{
+			super();
+			if(setToRandom)
+			{
+				//System.out.println("SportsCar sportscar setRandom.");
+				setRandom();
+			}
+			else
+			{
+				//System.out.println("SportsCar sportscar input.");
+				input();
+			}
+		}
+		
+	    private int   topSpeed ;
+	    private int   horsePower ;
+	    private int	  curbWeight;
+
+	    int getTopSpeed()
+	    {
+	        return topSpeed ;
+	    }
+
+	    void setTopSpeed (int topSpeed)
+	    {
+	        this.topSpeed = topSpeed ;
+	    }
+	    
+	    int getHorsePower()
+	    {
+	        return horsePower ;
+	    }
+
+	    void setHorsePower (int horsePower)
+	    {
+	        this.horsePower = horsePower ;
+	    }
+	    
+	    int getCurbWeight()
+	    {
+	        return curbWeight ;
+	    }
+
+	    void setCurbWeight (int curbWeight)
+	    {
+	        this.curbWeight = curbWeight ;
+	    }
+
+
+	    void setAll (String make, int year, String color, int milesPerGallon,
+	                 int price, int topSpeed, int horsePower, int curbWeight)
+	    {
+	        super.setAll(make, year, color, milesPerGallon, price) ;
+	        this.setTopSpeed    (topSpeed) ;
+	        this.setHorsePower (horsePower);
+	        this.setCurbWeight (curbWeight);
+	    }
+
+	    public void input()
+	    {
+	        super.input() ;
+	        super.setType (ListingType.SPORTSCAR) ;
+	        setTopSpeed ( ListingUtil.queryInt("Enter Top Speed:  ") ) ;
+	        setHorsePower(ListingUtil.queryInt("Enter horsepower: "));
+	        setCurbWeight(ListingUtil.queryInt("Enter curb weight: "));
+	    }
+
+	    public void setRandom ()
+	    {
+	        int   price ;
+	        int   topSpeed ;
+	        int horsePower;
+	        int curbWeight;
+	        super.setRandom() ;
+	        
+	        // Random price for sports cars
+	        price = (int)Math.floor(Math.random()*100000)+2000 ;
+	        setPrice(price) ;
+	        // Random top speed
+	        topSpeed = (int)Math.floor(Math.random()*200)+100 ;
+	        setTopSpeed(topSpeed) ;
+	        // Random horsepower
+	        horsePower = (int)(Math.random()* (700 - 250) + 250);
+	        setHorsePower(horsePower);
+	        // Random curb weight
+	        curbWeight = (int)(Math.random()* (4000 - 3000) + 3000);
+	        setCurbWeight(curbWeight);
+	    }
+
+	    public void print()
+	    {
+	        System.out.format ( "%-10s %-8s %4d %7d mpg %4d TopSp  %4d HP  %4d lbs  $%6d \n",
+	                            getMake(), getColor(), getYear(), getMilesPerGallon(),
+	                            getTopSpeed(), getHorsePower(), getCurbWeight(), getPrice()) ;
+	    }
+	    
+	    public boolean matchCriteria (SearchCriteria criteria)
+	    {
+	        boolean match ;
+	        match = super.matchCriteria(criteria) ;
+	        if (match==false) return false ;
+
+	        if (criteria.getType()!=ListingType.SPORTSCAR)
+	        {
+	            return false ;
+	        }
+
+	        // SportsCar matches
+	        if ( (criteria.getTopSpeedMin()!=0) && (topSpeed<criteria.getTopSpeedMin()) )
+	        {
+	            return false ;
+	        }
+
+	        if ( (criteria.getHorsePowerMin()!=0) && (horsePower<criteria.getHorsePowerMin()) )
+	        {
+	            return false ;
+	        }
+	        
+	        if ( (criteria.getCurbWeightMin()!=0) && (curbWeight<criteria.getCurbWeightMin()) )
+	        {
+	            return false ;
+	        }
+
+	        // Met criteria for all field specified
+	        return true ;
+	    }
+	    
+	}  // public class SportsCar
