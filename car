@@ -1,2 +1,77 @@
 #sub-class for cars
 #super class for sports-car
+
+public class Car extends RoadVehicle
+{
+
+	Car () //default constructor
+	{
+		super ();
+	}
+	
+	Car (String make, int year, String color, int milesPerGallon,
+            int price) // set all fields with arguments
+	{
+		super(make, year, color, milesPerGallon, price);
+	}
+	
+	Car(boolean setToRandom)
+	{
+		super();
+		if(setToRandom)
+		{
+			//System.out.println("Car car setRandom.");
+			setRandom();
+		}
+		else
+		{
+			//System.out.println("Car car input.");
+			input();
+		}
+	}
+	
+	void setAll (String make, int year, String color, int milesPerGallon,
+            int price)
+	{
+		super.setAll(make, year, color, milesPerGallon, price) ;
+	}
+	
+	public void input()
+    {
+        super.input() ;
+        super.setType (ListingType.CAR) ;
+    }
+	
+	public void setRandom ()
+    {
+        super.setRandom() ;
+    }
+	
+	public void print()
+    {
+        System.out.format ( "%-10s %-8s %4d %7d mpg $%6d \n",
+                            getMake(), getColor(), getYear(), getMilesPerGallon(),
+                            getPrice()) ;
+    }
+	
+	public boolean matchCriteria (SearchCriteria criteria)
+    {
+        boolean match ;
+        match = super.matchCriteria(criteria) ;
+        if (match==false) return false ;
+        
+        if ( (criteria.getType()!=ListingType.CAR) && (!(this instanceof SportsCar)) )
+        {
+            return false ;
+        }
+        
+        if (criteria.getType()!=ListingType.CAR)
+        {
+            return false ;
+        }
+        // Met criteria for all field specified
+        return true ;
+    }
+}//car class end
+
+
